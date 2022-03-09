@@ -11,11 +11,17 @@ public class MatrixIt implements Iterator<Integer> {
 
     public MatrixIt(int[][] data) {
         this.data = data;
-        setPointer();
     }
 
     @Override
     public boolean hasNext() {
+        while (row < data.length) {
+            if (column < data[row].length) {
+                break;
+            }
+            row++;
+            column = 0;
+        }
         return row < data.length && column < data[row].length;
     }
 
@@ -25,27 +31,7 @@ public class MatrixIt implements Iterator<Integer> {
             throw new NoSuchElementException();
         }
         int rsl = data[row][column];
-        movePointer();
-        return rsl;
-    }
-
-    private void setPointer() {
-        while (row < data.length) {
-            if (column < data[row].length) {
-                return;
-            }
-            row++;
-        }
-    }
-
-    private void movePointer() {
         column++;
-        while (row < data.length) {
-            if (column < data[row].length) {
-                return;
-            }
-            row++;
-            column = 0;
-        }
+        return rsl;
     }
 }
