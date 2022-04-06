@@ -9,9 +9,6 @@ public class SimpleArrayList<T> implements List<T> {
     private int modCount;
 
     public SimpleArrayList(int capacity) {
-        if (capacity < 1) {
-            throw new IllegalArgumentException("Размер массива должен быть больше 0");
-        }
         this.container = (T[]) new Object[capacity];
     }
 
@@ -19,24 +16,22 @@ public class SimpleArrayList<T> implements List<T> {
     public void add(T value) {
         modCount++;
         if (size == container.length) {
-            container = Arrays.copyOf(container, container.length * 2);
+            grow();
         }
         container[size++] = value;
     }
 
     @Override
     public T set(int index, T newValue) {
-        Objects.checkIndex(index, size);
-        T oldValue = container[index];
+        T oldValue = get(index);
         container[index] = newValue;
         return oldValue;
     }
 
     @Override
     public T remove(int index) {
-        Objects.checkIndex(index, size);
         modCount++;
-        T oldValue = container[index];
+        T oldValue = get(index);
         if (index < size - 1) {
             System.arraycopy(container, index + 1, container, index, size - index - 1);
         }
@@ -77,5 +72,11 @@ public class SimpleArrayList<T> implements List<T> {
                 return container[index++];
             }
         };
+    }
+
+    private void grow() {
+        container = container.length == 0
+                ? (T[]) new Object[10]
+                : Arrays.copyOf(container, container.length * 2);
     }
 }

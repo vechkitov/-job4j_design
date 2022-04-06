@@ -125,9 +125,4 @@ public class SimpleArrayListTest {
         list.add(0);
         iterator.next();
     }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void whenCapacityIsLessThan1ThenMustBeException() {
-        new SimpleArrayList<>(0);
-    }
 }
