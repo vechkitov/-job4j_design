@@ -48,14 +48,14 @@ public class SimpleLinkedList<E> implements List<E> {
 
             @Override
             public boolean hasNext() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException("Во время обхода коллекции она была изменена");
+                }
                 return node != null;
             }
 
             @Override
             public E next() {
-                if (expectedModCount != modCount) {
-                    throw new ConcurrentModificationException("Во время обхода коллекции она была изменена");
-                }
                 if (!hasNext()) {
                     throw new NoSuchElementException("Элемента не существует.");
                 }
