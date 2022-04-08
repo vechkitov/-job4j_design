@@ -21,6 +21,13 @@ public class ForwardLinked<T> implements Iterable<T> {
         tail = newNode;
     }
 
+    public void addFirst(T value) {
+        modCount++;
+        Node<T> newNode = new Node(value);
+        newNode.next = head;
+        head = newNode;
+    }
+
     public T deleteFirst() {
         if (head == null) {
             throw new NoSuchElementException("Элемента не существует.");
