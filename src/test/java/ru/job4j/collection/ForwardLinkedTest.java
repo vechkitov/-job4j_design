@@ -33,4 +33,16 @@ public class ForwardLinkedTest {
         Iterator<Integer> it = linked.iterator();
         assertThat(it.next(), is(2));
     }
+
+    @Test
+    public void whenAddAndDeleteItemsThenSizeIsCorrect() {
+        ForwardLinked<Integer> linked = new ForwardLinked<>();
+        linked.add(1);
+        linked.add(1);
+        assertThat(linked.getSize(), is(2));
+        linked.deleteFirst();
+        assertThat(linked.getSize(), is(1));
+        linked.addFirst(1);
+        assertThat(linked.getSize(), is(2));
+    }
 }
