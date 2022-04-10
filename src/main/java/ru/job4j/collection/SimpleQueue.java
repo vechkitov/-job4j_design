@@ -6,20 +6,15 @@ public class SimpleQueue<T> {
     private final SimpleStack<T> out = new SimpleStack<>();
 
     public T poll() {
-        moveElements(in, out);
+        if (out.size() == 0) {
+            while (in.size() > 0) {
+                out.push(in.pop());
+            }
+        }
         return out.pop();
     }
 
     public void push(T value) {
-        moveElements(out, in);
         in.push(value);
-    }
-
-    private void moveElements(SimpleStack<T> src, SimpleStack<T> dest) {
-        if (dest.size() == 0) {
-            while (src.size() > 0) {
-                dest.push(src.pop());
-            }
-        }
     }
 }
