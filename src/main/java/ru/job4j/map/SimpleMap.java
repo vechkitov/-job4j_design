@@ -29,15 +29,16 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public V get(K key) {
-        final int i = indexFor(key);
-        return table[i] == null ? null : table[i].value;
+        final MapEntry<K, V> entry = table[indexFor(key)];
+        return isKeysEquals(key, entry.key) ? entry.value : null;
+
     }
 
     @Override
     public boolean remove(K key) {
         modCount++;
         final int i = indexFor(key);
-        final boolean rsl = table[i] != null;
+        final boolean rsl = table[i] != null && isKeysEquals(key, table[i].key);
         if (rsl) {
             table[i] = null;
             count--;
@@ -82,6 +83,11 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     private int indexFor(K key) {
         return (table.length - 1) & hash(key == null ? 0 : key.hashCode());
+    }
+
+    private boolean isKeysEquals(K key1, K key2) {
+        return key1 == key2
+                || key1 != null && key1.hashCode() == key2.hashCode() && key1.equals(key2);
     }
 
     private void expand() {
