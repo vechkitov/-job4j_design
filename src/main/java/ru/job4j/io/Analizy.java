@@ -29,4 +29,17 @@ public class Analizy {
             e.printStackTrace();
         }
     }
+
+    public static void main(String[] args) {
+        final String sourceFile = "./data/859/two_ranges.log";
+        final String targetFile = "./data/859/unavailable.csv";
+
+        Analizy analizy = new Analizy();
+        analizy.unavailable(sourceFile, targetFile);
+        try (BufferedReader in = new BufferedReader(new FileReader(targetFile))) {
+            in.lines().forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
