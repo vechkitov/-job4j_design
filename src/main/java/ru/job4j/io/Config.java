@@ -10,7 +10,7 @@ import java.util.StringJoiner;
 public class Config {
 
     private static final String SKIPPED_PATTERN = "^(\\s*#.*|\\s*$)";
-    private static final String VALID_PATTERN = "\\S+=.*";
+    private static final String VALID_PATTERN = "\\S+=\\s*\\S+.*";
 
     private final String path;
     private final Map<String, String> values = new HashMap<>();
@@ -30,7 +30,7 @@ public class Config {
                     throw new IllegalArgumentException("Не соответствие формату \"ключ=значение\": " + line);
                 }
                 String[] pair = line.split("=", 2);
-                values.put(pair[0], pair[1].isBlank() ? null : pair[1]);
+                values.put(pair[0], pair[1]);
             }
         } catch (IOException e) {
             e.printStackTrace();

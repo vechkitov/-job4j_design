@@ -13,7 +13,6 @@ public class ConfigTest {
         Config config = new Config("./data/pair_without_comment.properties");
         config.load();
         assertThat(config.value("name"), is("Petr Arsentev"));
-        assertThat(config.value("surname"), is(nullValue()));
     }
 
     @Test
@@ -26,6 +25,11 @@ public class ConfigTest {
     @Test(expected = IllegalArgumentException.class)
     public void whenPairWithoutKey() {
         new Config("./data/pair_without_key.properties").load();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenPairWithoutValue() {
+        new Config("./data/pair_without_value.properties").load();
     }
 
     @Test(expected = IllegalArgumentException.class)
