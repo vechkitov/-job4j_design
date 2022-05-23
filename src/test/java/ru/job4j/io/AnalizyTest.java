@@ -1,40 +1,57 @@
 package ru.job4j.io;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 public class AnalizyTest {
 
-    private static final String ONE_RANGE_LOG = "./data/859/one_range.log";
-    private static final String TWO_RANGE_LOG = "./data/859/two_ranges.log";
-    private static final String TARGET_FILE = "./data/859/unavailable.csv";
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
 
     @Test
-    public void whenFileHasOneRangeOff() {
+    public void whenFileHasOneRangeOff() throws IOException {
+        File source = folder.newFile("source.log");
+        try (PrintWriter out = new PrintWriter(source)) {
+            out.println("200 10:56:01");
+            out.println("500 10:57:01");
+            out.println("400 10:58:01");
+            out.println("500 10:59:01");
+            out.println("400 11:01:02");
+            out.println("200 11:02:02");
+        }
+        File target = folder.newFile("unavailable.csv");
         Analizy analizy = new Analizy();
-        analizy.unavailable(ONE_RANGE_LOG, TARGET_FILE);
-        try (BufferedReader in = new BufferedReader(new FileReader(TARGET_FILE))) {
+        analizy.unavailable(source.getAbsolutePath(), target.getAbsolutePath());
+        try (BufferedReader in = new BufferedReader(new FileReader(target))) {
             List<String> lines = in.lines().toList();
             assertEquals(1L, lines.size());
             String[] timeStamps = lines.get(0).split(";");
             assertEquals("10:57:01", timeStamps[0]);
             assertEquals("11:02:02", timeStamps[1]);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
     @Test
-    public void whenFileHasTwoRangesOff() {
+    public void whenFileHasTwoRangesOff() throws IOException {
+        File source = folder.newFile("source.log");
+        try (PrintWriter out = new PrintWriter(source)) {
+            out.println("200 10:56:01");
+            out.println("500 10:57:01");
+            out.println("400 10:58:01");
+            out.println("200 10:59:01");
+            out.println("500 11:01:02");
+            out.println("200 11:02:02");
+        }
+        File target = folder.newFile("unavailable.csv");
         Analizy analizy = new Analizy();
-        analizy.unavailable(TWO_RANGE_LOG, TARGET_FILE);
-        try (BufferedReader in = new BufferedReader(new FileReader(TARGET_FILE))) {
+        analizy.unavailable(source.getAbsolutePath(), target.getAbsolutePath());
+        try (BufferedReader in = new BufferedReader(new FileReader(target))) {
             List<String> lines = in.lines().toList();
             assertEquals(2L, lines.size());
             String[] timeStamps1 = lines.get(0).split(";");
@@ -43,8 +60,6 @@ public class AnalizyTest {
             String[] timeStamps2 = lines.get(1).split(";");
             assertEquals("11:01:02", timeStamps2[0]);
             assertEquals("11:02:02", timeStamps2[1]);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
