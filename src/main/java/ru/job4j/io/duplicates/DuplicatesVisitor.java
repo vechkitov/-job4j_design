@@ -14,15 +14,10 @@ public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
         File f = file.toFile();
-        if (f.isFile()) {
-            FileProperty fileProperty = new FileProperty(f.length(), f.getName());
-            Set<String> paths = duplicates.get(fileProperty);
-            if (paths == null) {
-                paths = new HashSet<>();
-            }
-            paths.add(f.getAbsolutePath());
-            duplicates.put(fileProperty, paths);
-        }
+        FileProperty fileProperty = new FileProperty(f.length(), f.getName());
+        duplicates.putIfAbsent(fileProperty, new HashSet<>());
+        duplicates.get(fileProperty)
+                .add(f.getAbsolutePath());
         return FileVisitResult.CONTINUE;
     }
 
