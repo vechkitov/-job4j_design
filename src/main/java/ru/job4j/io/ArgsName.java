@@ -2,6 +2,7 @@ package ru.job4j.io;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class ArgsName {
 
@@ -11,9 +12,13 @@ public class ArgsName {
         String value = values.get(key);
         if (value == null) {
             throw new IllegalArgumentException(
-                    String.format("Неверное имя параметра: '%s'. Доступные имена параметров: %s", key, values.keySet()));
+                    String.format("Неверное имя параметра: '%s'. Доступные имена параметров: %s", key, allArgsNames()));
         }
         return value;
+    }
+
+    public Set<String> allArgsNames() {
+        return values.keySet();
     }
 
     private void parse(String[] args) {

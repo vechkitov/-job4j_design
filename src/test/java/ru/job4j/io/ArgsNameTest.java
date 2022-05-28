@@ -35,4 +35,25 @@ public class ArgsNameTest {
     public void whenWrongSomeArgument() {
         ArgsName.of(new String[]{"-enconding=UTF-8", "-Xmx="});
     }
+
+    @Test
+    public void whenArgsNotExist() {
+        ArgsName jvm = ArgsName.of(new String[0]);
+        assertThat(jvm.allArgsNames().size(), is(0));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenKeyNotExist() {
+        ArgsName.of(new String[]{"-=512"});
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenEqualSingNotExist() {
+        ArgsName.of(new String[]{"-Xmx:512"});
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenMinusSingNotExist() {
+        ArgsName.of(new String[]{"Xmx=512"});
+    }
 }
