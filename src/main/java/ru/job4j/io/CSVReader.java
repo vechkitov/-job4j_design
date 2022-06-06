@@ -83,10 +83,10 @@ public class CSVReader {
         }
         File source = new File(argsName.get(PATH_PARAM));
         if (!source.exists()) {
-            throw new IllegalArgumentException(String.format("Файла не существует: '%s'", source));
+            throw new IllegalArgumentException(String.format("Файла не существует: '%s'", source.getAbsolutePath()));
         }
         if (!source.isFile()) {
-            throw new IllegalArgumentException(String.format("'%s' не является файлом", source));
+            throw new IllegalArgumentException(String.format("'%s' не является файлом", source.getAbsolutePath()));
         }
     }
 }

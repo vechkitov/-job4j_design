@@ -34,11 +34,15 @@ public class ConsoleChat {
             msg = new Scanner(System.in).nextLine();
             log.add(msg);
             if (KEY_WORDS.contains(msg)) {
-                isRun = switch (msg) {
-                    case STOP -> false;
-                    case CONTINUE -> true;
-                    default -> isRun;
-                };
+                switch (msg) {
+                    case STOP:
+                        isRun = false;
+                        break;
+                    case CONTINUE:
+                        isRun = true;
+                        break;
+                    default:
+                }
             } else if (isRun) {
                 String answer = answers.get(random.nextInt(answers.size()));
                 System.out.println(answer);
