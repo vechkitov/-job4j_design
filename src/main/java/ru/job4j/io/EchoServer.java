@@ -17,7 +17,7 @@ public class EchoServer {
                     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     String str = in.readLine();
                     out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
-                    String paramValue = str.split("\s")[1]
+                    String paramValue = str.split(" ")[1]
                             .replace("/?msg=", "");
                     if ("Hello".equals(paramValue)) {
                         out.write("Hello".getBytes());
