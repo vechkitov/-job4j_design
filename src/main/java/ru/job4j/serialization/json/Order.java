@@ -1,17 +1,16 @@
 package ru.job4j.serialization.json;
 
-import javax.xml.bind.JAXBContext;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.List;
 
 @XmlRootElement
 public class Order {
@@ -43,6 +42,26 @@ public class Order {
         this.couriers = couriers;
     }
 
+    public boolean isDelivered() {
+        return isDelivered;
+    }
+
+    public double getDeliveryCast() {
+        return deliveryCast;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public String[] getCouriers() {
+        return couriers;
+    }
+
     @Override
     public String toString() {
         return "Order{"
@@ -58,19 +77,18 @@ public class Order {
         final Order order = new Order(false, 300d, "после обеда",
                 new Address("Лизюкова", 13),
                 new String[]{"Мышкин", "Собакевич"});
-        JAXBContext context = JAXBContext.newInstance(Order.class);
-        Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        String xml;
-        try (var writer = new StringWriter()) {
-            marshaller.marshal(order, writer);
-            xml = writer.getBuffer().toString();
-            System.out.println(xml);
-        }
-        Unmarshaller unmarshaller = context.createUnmarshaller();
-        try (var reader = new StringReader(xml)) {
-            Order result = (Order) unmarshaller.unmarshal(reader);
-            System.out.println(result);
-        }
+        var jsonAddress = new JSONObject("{\n"
+                + "\t\"street\":\"Лизюкова\",\n"
+                + "\t\"houseNumber\":13\n"
+                + "}");
+        JSONArray jsonCouriers = new JSONArray(List.of("Мышкин", "Собакевич"));
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("isDelivered", order.isDelivered());
+        jsonObject.put("deliveryCast", order.getDeliveryCast());
+        jsonObject.put("note", order.getNote());
+        jsonObject.put("address", jsonAddress);
+        jsonObject.put("couriers", jsonCouriers);
+        System.out.println(jsonObject);
+        System.out.println(new JSONObject(order));
     }
 }
