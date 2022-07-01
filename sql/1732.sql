@@ -19,20 +19,29 @@ insert into product(name, type_id, expired_date, price) values
 ('Сыр творожный', 1, '2022.07.04', 130),
 ('Шоколадное мороженое', 2, '2022.07.09', 40),
 ('Сливочное мороженое', 2, '2022.06.09', 35.5),
-('Молоко топленое', 3, '2022.07.06', 88)
+('Молоко топленое', 3, '2022.07.06', 88),
+('Мороженое большое', 2, '2022.08.19', 450)
 ;
 
 /*получение всех продуктов с типом "СЫР"*/
-select * from product where type_id = 1;
+select p.name as product, t.name as type
+from product as p
+join type as t on t.id = p.type_id
+where t.name = 'сыр';
 
 /*получения всех продуктов, у кого в имени есть слово "мороженое"*/
-select * from product where name like '%мороженое%'
+select * from product where name like '%мороженое%';
 
 /*все продукты, срок годности которых уже истек*/
 select * from product where expired_date < current_date;
 
 /*самый дорогой продукт*/
-select * from product order by price desc limit 1;
+/*вариант 1*/
+select * from product where price = (select max(price) from product);
+/*вариант 2*/
+select p.* 
+from product as p
+join (select max(price) as price from product) as pr on pr.price = p.price;
 
 /* для каждого типа количество продуктов к нему принадлежащих. В виде имя_типа, количество*/
 select t.name, count(p.id)
@@ -41,7 +50,10 @@ join product as p on p.type_id = t.id
 group by t.name;
 
 /*получение всех продуктов с типом "СЫР" и "МОЛОКО"*/
-select * from product where type_id = 1 or type_id = 3;
+select p.name as product, t.name as type
+from product as p
+join type as t on t.id = p.type_id
+where t.name = 'сыр' or t.name = 'молоко';
 
 /*тип продуктов, которых осталось меньше 5 штук*/
 select t.name
