@@ -1,6 +1,7 @@
 package ru.job4j.jdbc;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -13,7 +14,11 @@ public class TableEditorDemo {
     private static final String TYPE_TEXT = "text";
 
     public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
-        try (var te = new TableEditor(new Properties())) {
+        final var properties = new Properties();
+        try (InputStream is = TableEditor.class.getClassLoader().getResourceAsStream("app.properties")) {
+            properties.load(is);
+        }
+        try (var te = new TableEditor(properties)) {
             te.createTable(TABLE_NAME);
             System.out.printf("1. Создана таблица %s:%n%s",
                     TABLE_NAME, getTableScheme(te.getConnection(), TABLE_NAME));

@@ -1,6 +1,5 @@
 package ru.job4j.jdbc;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -11,14 +10,12 @@ public class TableEditor implements AutoCloseable {
     private Connection connection;
     private Properties properties;
 
-    public TableEditor(Properties properties) throws IOException, SQLException, ClassNotFoundException {
+    public TableEditor(Properties properties) throws SQLException, ClassNotFoundException {
         this.properties = properties;
         initConnection();
     }
 
-    private void initConnection() throws IOException, ClassNotFoundException, SQLException {
-        properties.load(
-                TableEditor.class.getClassLoader().getResourceAsStream("app.properties"));
+    private void initConnection() throws ClassNotFoundException, SQLException {
         Class.forName(properties.getProperty("db.driver"));
         connection = DriverManager.getConnection(properties.getProperty("db.url"),
                 properties.getProperty("db.login"),
