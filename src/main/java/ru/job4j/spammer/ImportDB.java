@@ -27,6 +27,11 @@ public class ImportDB {
         List<User> users = new ArrayList<>();
         try (BufferedReader rd = new BufferedReader(new FileReader(dump))) {
             rd.lines().forEach(line -> {
+                if (line.isBlank()
+                        || !line.matches("^.+;[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+;$")) {
+                    throw new IllegalArgumentException(String.format(
+                            "Строка '%s' не соответствует формату 'имя;email;'", line));
+                }
                 String[] lines = line.split(";");
                 users.add(new User(lines[0], lines[1]));
             });
