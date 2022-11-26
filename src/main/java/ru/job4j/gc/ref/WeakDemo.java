@@ -9,8 +9,8 @@ import java.util.concurrent.TimeUnit;
 public class WeakDemo {
 
     public static void main(String[] args) throws InterruptedException {
-        //example1();
-        //example2();
+        /*example1();*/
+        /*example2();*/
         example3();
     }
 
@@ -53,7 +53,7 @@ public class WeakDemo {
         WeakReference<Object> weak = new WeakReference<>(object, queue);
         object = null;
 
-        //System.gc();
+        /*System.gc();*/
 
         TimeUnit.SECONDS.sleep(1);
         System.out.println("from link " + weak);
