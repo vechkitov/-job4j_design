@@ -1,7 +1,6 @@
 package ru.job4j.cache.menu;
 
-import ru.job4j.cache.AbstractCache;
-import ru.job4j.cache.factory.DirFileCacheFactory;
+import ru.job4j.cache.DirFileCache;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,7 +14,7 @@ import java.util.Scanner;
  * - получить содержимое файла из кэша
  */
 public class Emulator {
-    private static AbstractCache<String, String> cache = null;
+    private static DirFileCache cache = null;
     private static final String MENU = """
             %nМеню:
             1. Создать кэш
@@ -43,14 +42,12 @@ public class Emulator {
         }
     }
 
-    private static AbstractCache<String, String> createCache(Scanner scanner) {
+    private static DirFileCache createCache(Scanner scanner) {
         System.out.println("Укажите полный путь к кэшируемой директории:");
         String dir = scanner.nextLine();
         if (Files.isDirectory(Path.of(dir))) {
-            cache = new DirFileCacheFactory(dir).createCache();
-            if (cache != null) {
-                System.out.println("Кэш создан");
-            }
+            cache = new DirFileCache(dir);
+            System.out.println("Кэш создан");
         } else {
             System.err.printf("Директории не существует: %s%n", dir);
         }
@@ -65,7 +62,7 @@ public class Emulator {
         System.out.println("Введите ключ данных:");
         String key = scanner.nextLine();
         try {
-            cache.load(key);
+            cache.put(key, cache.load(key));
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }
@@ -80,19 +77,6 @@ public class Emulator {
             return;
         }
         System.out.println("Введите ключ данных:");
-        String key = scanner.nextLine();
-        String data = cache.get(key);
-        if (data == null) {
-            System.err.printf("Данных для ключа '%s' в кэше нет. Пытаюсь загрузить...%n", key);
-            try {
-                cache.load(key);
-                data = cache.get(key);
-            } catch (IllegalArgumentException e) {
-                System.err.println(e.getMessage());
-            }
-        }
-        if (data != null) {
-            System.out.printf("Получены данные:%n%s%n", data);
-        }
+        System.out.printf("Получены данные:%n%s%n", cache.get(scanner.nextLine()));
     }
 }

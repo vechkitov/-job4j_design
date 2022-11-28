@@ -20,9 +20,7 @@ public class DirFileCache extends AbstractCache<String, String> {
     public String load(String key) {
         Path file = Path.of(cachingDir).resolve(key);
         try {
-            String content = Files.readString(file, StandardCharsets.UTF_8);
-            put(key, content);
-            return content;
+            return Files.readString(file, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new IllegalArgumentException(String.format("Не могу прочитать из файла %s", file));
         }
