@@ -17,7 +17,7 @@ public class DirFileCache extends AbstractCache<String, String> {
     }
 
     @Override
-    public String load(String key) {
+    protected String load(String key) {
         Path file = Path.of(cachingDir).resolve(key);
         try {
             return Files.readString(file, StandardCharsets.UTF_8);
