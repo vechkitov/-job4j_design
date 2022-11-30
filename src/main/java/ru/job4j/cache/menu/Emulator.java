@@ -1,5 +1,7 @@
 package ru.job4j.cache.menu;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.job4j.cache.DirFileCache;
 
 import java.io.IOException;
@@ -14,16 +16,18 @@ import java.util.Scanner;
  * - получить содержимое файла из кэша
  */
 public class Emulator {
+    private static final Logger LOG = LoggerFactory.getLogger(Emulator.class);
     private static final int CREATE_CACHE = 1;
     private static final int LOAD_DATA = 2;
     private static final int GET_DATA = 3;
+    private static final String LINE_SEPARATOR = System.lineSeparator();
     private static final String MENU = String.format("""
-                    %nМеню:
+                    %sМеню:
                     %d. Создать кэш
                     %d. Загрузить содержимое файла в кэш
                     %d. Получить содержимое файла из кэша
                     Любая другая цифра - для выхода
-                    Выбор: """,
+                    Выбор: """, LINE_SEPARATOR,
             CREATE_CACHE, LOAD_DATA, GET_DATA);
 
     public static void main(String[] args) throws IOException {
@@ -40,9 +44,9 @@ public class Emulator {
                 } else if (i == GET_DATA) {
                     getData(cache, scanner);
                 } else {
-                    System.out.println("Завершение работы.");
+                    LOG.info("Завершение работы.");
                 }
-            } while (i >= 1 && i <= 3);
+            } while (i >= CREATE_CACHE && i <= GET_DATA);
         }
     }
 
@@ -51,36 +55,32 @@ public class Emulator {
         String dir = scanner.nextLine();
         if (Files.isDirectory(Path.of(dir))) {
             cache = new DirFileCache(dir);
-            System.out.println("Кэш создан");
+            LOG.info("Кэш создан");
         } else {
-            System.err.printf("Директории не существует: %s%n", dir);
+            LOG.error("Директории не существует: {}", dir);
         }
         return cache;
     }
 
     private static void loadData(DirFileCache cache, Scanner scanner) {
         if (cache == null) {
-            System.err.println("Кэш еще не создан. Создайте кэш, выбрав соответствующий пункт меню");
+            LOG.error("Кэш еще не создан. Создайте кэш, выбрав соответствующий пункт меню");
             return;
         }
         System.out.println("Введите ключ данных:");
         String key = scanner.nextLine();
-        try {
-            cache.put(key, null); /* очищаем старые данные в кэше */
-            if (cache.get(key) != null) { /* загружаем новые данные */
-                System.out.printf("Данные для ключа '%s' загружены%n", key);
-            }
-        } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
+        cache.put(key, null); /* очищаем старые данные в кэше */
+        if (cache.get(key) != null) { /* загружаем новые данные */
+            LOG.info("Данные для ключа '{}' загружены", key);
         }
     }
 
     private static void getData(DirFileCache cache, Scanner scanner) {
         if (cache == null) {
-            System.err.println("Кэш еще не создан. Создайте кэш, выбрав соответствующий пункт меню");
+            LOG.error("Кэш еще не создан. Создайте кэш, выбрав соответствующий пункт меню");
             return;
         }
         System.out.println("Введите ключ данных:");
-        System.out.printf("Получены данные:%n%s%n", cache.get(scanner.nextLine()));
+        LOG.info("Получены данные:{}{}", LINE_SEPARATOR, cache.get(scanner.nextLine()));
     }
 }
