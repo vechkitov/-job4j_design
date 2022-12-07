@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Disabled
 public class CinemaTest {
@@ -35,16 +35,14 @@ public class CinemaTest {
         Account account = new AccountCinema();
         Cinema cinema = new Cinema3D();
         Calendar date = Calendar.getInstance();
-        assertThrows(IllegalArgumentException.class, () -> {
-            cinema.buy(account, -1, 1, date);
-        });
+        assertThatThrownBy(() -> cinema.buy(account, -1, 1, date))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     public void whenFindByNullThenGetException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Cinema3D().find(null);
-        });
+        assertThatThrownBy(() -> new Cinema3D().find(null))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -59,31 +57,37 @@ public class CinemaTest {
 
     @Test
     public void whenAddNullSessionThenGetException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Cinema3D().add(null);
-        });
+        assertThatThrownBy(() -> new Cinema3D().add(null))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     public void whenBuyOnNullAccountThenGetException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Cinema3D().buy(null, 1, 1, Calendar.getInstance());
-        });
+        assertThatThrownBy(() -> new Cinema3D().buy(null, 1, 1, Calendar.getInstance()))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     public void whenBuyOnInvalidColumnThenGetException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Cinema3D().buy(new AccountCinema(), 1, -1, Calendar.getInstance());
-        });
+        assertThatThrownBy(() -> new Cinema3D().buy(new AccountCinema(), 1, -1, Calendar.getInstance()))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     public void whenSessionDateGreatThenCurrentDateThenGetException() {
         Calendar date = Calendar.getInstance();
         date.set(9999, Calendar.DECEMBER, 31);
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Cinema3D().buy(new AccountCinema(), 1, 1, date);
-        });
+        assertThatThrownBy(() -> new Cinema3D().buy(new AccountCinema(), 1, 1, date))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void whenBuyTicketOnTheSameSeatThenGetException() {
+        Account account = new AccountCinema();
+        Cinema cinema = new Cinema3D();
+        Calendar date = Calendar.getInstance();
+        cinema.buy(account, 1, 1, date);
+        assertThatThrownBy(() -> cinema.buy(account, 1, 1, date))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
