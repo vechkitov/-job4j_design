@@ -1,4 +1,4 @@
-package ru.job4j.ood.srp;
+package ru.job4j.ood.srp.notsrp;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
