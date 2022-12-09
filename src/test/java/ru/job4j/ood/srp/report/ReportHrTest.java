@@ -8,9 +8,9 @@ import ru.job4j.ood.srp.store.Store;
 import java.util.Calendar;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.job4j.ood.srp.report.ReportHr.LINE_SEPARATOR;
 
 class ReportHrTest {
-    private static final String LINE_SEPARATOR = System.lineSeparator();
 
     @Test
     void whenGenerate() {

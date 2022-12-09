@@ -11,9 +11,9 @@ import ru.job4j.ood.srp.store.MemStore;
 import java.util.Calendar;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.job4j.ood.srp.report.ReportAccounting.LINE_SEPARATOR;
 
 class ReportAccountingTest {
-    private static final String LINE_SEPARATOR = System.lineSeparator();
 
     @Test
     void whenGenerate() {
@@ -29,7 +29,7 @@ class ReportAccountingTest {
                 .append(parser.parse(worker.getFired())).append(" ")
                 .append(3.0).append(LINE_SEPARATOR)
                 .toString();
-        assertThat(new ReportAccounting(store, parser, Currency.RUB, Currency.EUR, converter)
+        assertThat(new ReportAccounting(store, parser, Currency.EUR, converter)
                 .generate(em -> true))
                 .isEqualTo(expected);
     }

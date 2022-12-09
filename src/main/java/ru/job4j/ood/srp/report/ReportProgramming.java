@@ -8,7 +8,7 @@ import java.util.Calendar;
 import java.util.function.Predicate;
 
 public class ReportProgramming implements Report {
-    private static final String LINE_SEPARATOR = System.lineSeparator();
+    public static final String LINE_SEPARATOR = System.lineSeparator();
     private final Store store;
     private final DateTimeParser<Calendar> parser;
 

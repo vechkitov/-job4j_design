@@ -8,12 +8,9 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class ReportHr implements Report {
-    private static final String LINE_SEPARATOR = System.lineSeparator();
-    private final Store store;
-    /* Т.к. в задании прямо сказано, что этот отчет должен "выводить сотрудников в порядке убывания зарплаты",
-     * решил инициализировать Comparator прямо здесь. Если бы не был указан конкретный тип сортировки,
-     * передавал бы Comparator в конструктор */
+    public static final String LINE_SEPARATOR = System.lineSeparator();
     private final Comparator<Employee> comparator = Comparator.comparingDouble(Employee::getSalary).reversed();
+    private final Store store;
 
     public ReportHr(Store store) {
         this.store = store;
