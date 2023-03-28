@@ -1,11 +1,10 @@
-package ru.job4j.ood.lsp;
+package ru.job4j.ood.lsp.foodstore;
 
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ShopTest {
 
