@@ -62,10 +62,10 @@ class ParkingImplTest {
     @Test
     void whenCarFreesUpSpace() {
         var parking = new ParkingImpl(spacesCar, new SpaceForTruck[]{});
-        assertThat(parking.isSpaceForCarOccupied(2))
-                .contains(car2);
-        parking.freeSpace(car2);
-        assertThat(parking.isSpaceForCarOccupied(2))
+        assertThat(parking.isSpaceForCarOccupied(0))
+                .contains(car1);
+        parking.freeSpace(car1);
+        assertThat(parking.isSpaceForCarOccupied(0))
                 .isNotPresent();
     }
 
@@ -114,10 +114,10 @@ class ParkingImplTest {
     @Test
     void whenCarFreesUpSpaceForTrucks() {
         var parking = new ParkingImpl(spacesCar, spacesTruck);
-        assertThat(parking.isSpaceForTruckOccupied(2))
-                .contains(truck2);
-        parking.freeSpace(truck2);
-        assertThat(parking.isSpaceForTruckOccupied(2))
+        assertThat(parking.isSpaceForTruckOccupied(0))
+                .contains(truck1);
+        parking.freeSpace(truck1);
+        assertThat(parking.isSpaceForTruckOccupied(0))
                 .isNotPresent();
     }
 
