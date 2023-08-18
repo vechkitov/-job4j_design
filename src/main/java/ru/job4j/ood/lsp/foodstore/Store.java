@@ -27,4 +27,9 @@ public interface Store {
      * @return true - срока годности продукта соответствует условиям хранилища; false - не соответствует
      */
     boolean isShelfLifeCorrect(Food food, LocalDateTime date);
+
+    /**
+     * Удаляет все продукты из хранилища
+     */
+    void clear();
 }

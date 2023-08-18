@@ -2,6 +2,7 @@ package ru.job4j.ood.lsp.foodstore;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Сервис распределения продуктов по хранилищам в зависимости от срока годности.
@@ -29,6 +30,19 @@ public class ControlQuality {
                 break;
             }
         }
+    }
+
+    /**
+     * Перераспределяет хранящиеся продукты между хранилищами на указанную дату
+     *
+     * @param date дата, относительно которой рассчитывается израсходованный срок годности продукта
+     */
+    public void resort(LocalDateTime date) {
+        Set<Food> foods = stores.stream()
+                .flatMap(store -> store.getFoods().stream())
+                .collect(Collectors.toSet());
+        stores.forEach(Store::clear);
+        foods.forEach(food -> allocateFoodToStore(food, date));
     }
 
     /**

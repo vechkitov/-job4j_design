@@ -20,4 +20,9 @@ public abstract class AbstractStore implements Store {
     public Set<Food> getFoods() {
         return foods;
     }
+
+    @Override
+    public void clear() {
+        foods.clear();
+    }
 }
